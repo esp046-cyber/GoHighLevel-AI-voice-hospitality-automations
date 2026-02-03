@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GHL + AI Voice & Hospitality 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#0a0a0f; --bg2:#12121a; --bg3:#1a1a26;
+  --card:#161620; --border:rgba(255,255,255,0.06);
+  --gold:#c9a84c; --gold2:#e4c56d; --cream:#f0e6d3;
+  --muted:rgba(240,230,211,0.45);
+  --accent:#7c6ddd; --accent2:#a78bfa;
+  --teal:#5feac0; --pink:#f06cb0;
+  --red:#ff6b6b; --orange:#fd9644;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);min-height:100vh;overflow-x:hidden;font-size:14px;line-height:1.6;}
+
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.85);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:0 1%;display:flex;align-items:center;justify-content:space-between;height:50px;}
+.topbar .logo{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--gold);text-transform:uppercase;}
+.topbar .logo span{color:var(--cream);font-weight:400;}
+.topbar .tag{font-size:10px;background:linear-gradient(135deg,var(--accent),var(--pink));color:#fff;border-radius:20px;padding:3px 10px;font-weight:500;letter-spacing:.04em;}
+
+/* ── PILL NAV ── */
+.pill-nav{position:sticky;top:50px;z-index:99;background:rgba(10,10,15,0.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:8px 1%;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.pill-nav::-webkit-scrollbar{display:none;}
+.pill{flex-shrink:0;display:flex;align-items:center;gap:5px;padding:6px 13px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:11px;font-weight:500;cursor:pointer;transition:all .25s;white-space:nowrap;}
+.pill .pill-icon{font-size:13px;}
+.pill.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08);}
+.pill.new-badge{position:relative;}
+.pill.new-badge::after{content:'NEW';position:absolute;top:-6px;right:-6px;font-size:7px;font-weight:700;background:var(--red);color:#fff;padding:1px 4px;border-radius:8px;letter-spacing:.04em;}
+
+/* ── HERO ── */
+.hero{margin:0 1%;padding:24px 0 18px;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;color:var(--gold2);letter-spacing:.12em;text-transform:uppercase;font-weight:500;margin-bottom:8px;}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--gold2);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;line-height:1.25;color:#fff;letter-spacing:-.02em;}
+.hero h1 .highlight{background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{margin-top:8px;font-size:12px;color:var(--muted);font-weight:300;max-width:340px;line-height:1.7;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.hero-tags span{font-size:10px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--muted);}
+.hero-tags span.active{border-color:var(--gold);color:var(--gold);}
+
+/* ── SEC LABEL ── */
+.sec-label{margin:0 1%;padding-top:18px;padding-bottom:8px;display:flex;align-items:center;gap:8px;}
+.sec-label .line{flex:1;height:1px;background:var(--border);}
+.sec-label span{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+
+/* ── STATS ── */
+.stats-row{margin:0 1%;display:grid;grid-template-columns:1fr 1fr 1fr;gap:1%;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;}
+.stat-card .num{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;}
+.stat-card .num .c{color:var(--gold);}
+.stat-card .lbl{font-size:9px;color:var(--muted);margin-top:2px;}
+
+/* ── TIPS ── */
+.tips-row{margin:0 1%;display:flex;flex-direction:column;gap:8px;}
+.tip-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px;display:flex;gap:11px;align-items:flex-start;}
+.tip-card .tip-icon{font-size:20px;flex-shrink:0;}
+.tip-card h4{font-size:12px;font-weight:600;color:#fff;margin-bottom:2px;}
+.tip-card p{font-size:10.5px;color:var(--muted);line-height:1.6;}
+
+/* ── CTA ── */
+.cta-block{margin:18px 1% 0;background:linear-gradient(135deg,#1a1630,#0f1a1a);border:1px solid var(--border);border-radius:16px;padding:20px 16px;text-align:center;position:relative;overflow:hidden;}
+.cta-block::before{content:'';position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.12),transparent 70%);}
+.cta-block h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;position:relative;}
+.cta-block p{font-size:11px;color:var(--muted);margin:5px 0 12px;position:relative;}
+.cta-btn{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0a0a0f;font-weight:700;font-size:12px;padding:9px 26px;border-radius:24px;border:none;cursor:pointer;position:relative;transition:transform .2s;}
+.cta-btn:active{transform:scale(0.95);}
+
+/* ── GENERIC ACCORDION ── */
+.acc-list{margin:0 1%;display:flex;flex-direction:column;gap:8px;}
+.acc-card{border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--card);cursor:pointer;transition:border-color .3s,transform .2s;}
+.acc-card:active{transform:scale(0.98);}
+.acc-card.open{border-color:var(--accent2);}
+.acc-card.open.gold-open{border-color:var(--gold);}
+.acc-card.open.teal-open{border-color:var(--teal);}
+.acc-card.open.red-open{border-color:var(--red);}
+.acc-head{display:flex;align-items:center;gap:10px;padding:13px 14px;}
+.acc-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.acc-icon.gold{background:linear-gradient(135deg,#2a2210,#3d3018);}
+.acc-icon.purple{background:linear-gradient(135deg,#1e1a2e,#2d2648);}
+.acc-icon.teal{background:linear-gradient(135deg,#0e2a24,#163d35);}
+.acc-icon.pink{background:linear-gradient(135deg,#2a1020,#3d1830);}
+.acc-icon.red{background:linear-gradient(135deg,#2a1010,#3d1818);}
+.acc-icon.blue{background:linear-gradient(135deg,#10182a,#18243d);}
+.acc-icon.orange{background:linear-gradient(135deg,#2a1e10,#3d2e18);}
+.acc-icon.dark{background:var(--bg3);}
+.acc-info{flex:1;min-width:0;}
+.acc-info h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff;}
+.acc-info p{font-size:10.5px;color:var(--muted);margin-top:1px;}
+.acc-arrow{color:var(--muted);font-size:13px;transition:transform .3s;flex-shrink:0;}
+.acc-card.open .acc-arrow{transform:rotate(180deg);}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.4,0,.2,1);}
+.acc-card.open .acc-body{max-height:800px;}
+.acc-inner{padding:0 14px 15px;border-top:1px solid var(--border);padding-top:13px;}
+.acc-inner p{font-size:11.5px;color:var(--muted);line-height:1.75;margin-bottom:8px;}
+.acc-inner strong.w{color:#fff;}
+
+/* step-mini */
+.step-mini{display:flex;gap:8px;align-items:flex-start;margin-bottom:7px;}
+.step-mini .sn{width:20px;height:20px;border-radius:6px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--gold);flex-shrink:0;margin-top:1px;}
+.step-mini .st{font-size:11px;color:var(--cream);}
+.step-mini .st .dim{color:var(--muted);font-weight:300;}
+
+/* tip box */
+.tip-box{background:rgba(124,109,221,0.08);border:1px solid rgba(124,109,221,0.2);border-radius:8px;padding:8px 10px;font-size:10.5px;color:var(--accent2);margin-top:8px;line-height:1.6;}
+.tip-box strong{color:#fff;}
+.tip-box.gold-tip{background:rgba(201,168,76,0.08);border-color:rgba(201,168,76,0.2);color:var(--gold2);}
+.tip-box.red-tip{background:rgba(255,107,107,0.08);border-color:rgba(255,107,107,0.2);color:var(--red);}
+.tip-box.teal-tip{background:rgba(95,234,192,0.08);border-color:rgba(95,234,192,0.2);color:var(--teal);}
+
+/* code block */
+.code-block{background:var(--bg);border-radius:8px;padding:10px 12px;margin:8px 0;font-family:'Courier New',monospace;font-size:10px;color:#7feaa0;line-height:1.9;border:1px solid var(--border);overflow-x:auto;}
+
+/* ── PRICING TABLE ── */
+.price-grid{margin:0 1%;display:flex;flex-direction:column;gap:8px;}
+.price-card{border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--card);}
+.price-card.featured{border-color:var(--gold);position:relative;}
+.price-card.featured .feat-badge{position:absolute;top:0;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0a0a0f;font-size:9px;font-weight:700;padding:3px 14px;border-radius:0 0 8px 8px;letter-spacing:.06em;}
+.price-top{padding:16px 14px 10px;display:flex;justify-content:space-between;align-items:flex-end;}
+.price-top .p-left h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.price-top .p-left p{font-size:10px;color:var(--muted);margin-top:2px;}
+.price-top .p-right .amount{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;}
+.price-top .p-right .amount .per{font-size:10px;color:var(--muted);font-weight:400;font-family:'DM Sans',sans-serif;}
+.price-feats{padding:0 14px 14px;}
+.price-feats .pf{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px;color:var(--cream);}
+.price-feats .pf:last-child{border:none;}
+.price-feats .pf .tick{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
+.price-feats .pf .tick.yes{background:rgba(95,234,192,0.15);color:var(--teal);}
+.price-feats .pf .tick.no{background:rgba(255,107,107,0.12);color:var(--red);}
+.price-feats .pf .tick.maybe{background:rgba(253,150,68,0.15);color:var(--orange);}
+
+/* ── COMPARE TABLE ── */
+.compare-wrap{margin:0 1%;overflow-x:auto;}
+.compare-table{width:100%;border-collapse:collapse;min-width:280px;}
+.compare-table th{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:8px 6px;text-align:center;border-bottom:1px solid var(--border);}
+.compare-table th:first-child{text-align:left;color:var(--cream);}
+.compare-table th .th-name{font-size:11px;color:#fff;font-weight:700;font-family:'Syne',sans-serif;text-transform:none;letter-spacing:0;display:block;margin-bottom:1px;}
+.compare-table th .th-price{color:var(--gold);font-size:10px;font-weight:600;letter-spacing:0;text-transform:none;}
+.compare-table td{padding:9px 6px;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border);text-align:center;}
+.compare-table td:first-child{text-align:left;color:var(--cream);font-weight:500;}
+.compare-table .badge-cell .b{display:inline-block;font-size:9px;padding:2px 7px;border-radius:10px;font-weight:600;}
+.badge-cell .b.best{background:rgba(95,234,192,0.12);color:var(--teal);}
+.badge-cell .b.good{background:rgba(201,168,76,0.12);color:var(--gold2);}
+.badge-cell .b.ok{background:rgba(253,150,68,0.12);color:var(--orange);}
+.compare-table .highlight-col{background:rgba(201,168,76,0.04);}
+.compare-legend{margin:10px 1% 0;display:flex;gap:12px;flex-wrap:wrap;}
+.compare-legend .leg{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);}
+.compare-legend .leg .ld{width:8px;height:8px;border-radius:3px;}
+.ld.best{background:var(--teal);} .ld.good{background:var(--gold2);} .ld.ok{background:var(--orange);}
+
+/* ── TROUBLESHOOT ── */
+.trouble-list{margin:0 1%;display:flex;flex-direction:column;gap:8px;}
+.trouble-card{border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--card);cursor:pointer;transition:border-color .3s,transform .2s;}
+.trouble-card:active{transform:scale(0.98);}
+.trouble-card.open{border-color:var(--red);}
+.trouble-head{display:flex;align-items:center;gap:10px;padding:13px 14px;}
+.trouble-head .t-icon{width:30px;height:30px;border-radius:8px;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.trouble-head .t-info{flex:1;}
+.trouble-head .t-info h3{font-size:12.5px;font-weight:600;color:#fff;}
+.trouble-head .t-info .t-tag{display:inline-block;margin-top:3px;font-size:9px;padding:1px 7px;border-radius:10px;font-weight:600;}
+.t-tag.calls{background:rgba(124,109,221,0.12);color:var(--accent2);}
+.t-tag.sms{background:rgba(201,168,76,0.12);color:var(--gold2);}
+.t-tag.workflow{background:rgba(95,234,192,0.12);color:var(--teal);}
+.t-tag.setup{background:rgba(253,150,68,0.12);color:var(--orange);}
+.trouble-arrow{color:var(--muted);font-size:13px;transition:transform .3s;flex-shrink:0;}
+.trouble-card.open .trouble-arrow{transform:rotate(180deg);}
+.trouble-body{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.4,0,.2,1);}
+.trouble-card.open .trouble-body{max-height:600px;}
+.trouble-inner{padding:0 14px 14px;border-top:1px solid var(--border);padding-top:12px;}
+.trouble-inner .cause{margin-bottom:6px;}
+.trouble-inner .cause .cl{font-size:10px;color:var(--red);font-weight:600;margin-bottom:3px;letter-spacing:.04em;text-transform:uppercase;}
+.trouble-inner .cause p{font-size:11px;color:var(--muted);line-height:1.65;}
+.trouble-inner .fix{margin-top:8px;background:rgba(95,234,192,0.06);border:1px solid rgba(95,234,192,0.15);border-radius:8px;padding:8px 10px;}
+.trouble-inner .fix .fl{font-size:9.5px;color:var(--teal);font-weight:700;margin-bottom:4px;letter-spacing:.06em;}
+.trouble-inner .fix p{font-size:11px;color:var(--cream);line-height:1.65;}
+
+/* ── INTEGRATION MAP ── */
+.integ-group{margin:0 1%;margin-bottom:4px;}
+.integ-group-label{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding:10px 0 6px;display:flex;align-items:center;gap:6px;}
+.integ-group-label .igl-line{flex:1;height:1px;background:var(--border);}
+.integ-cards{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.integ-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 10px;cursor:pointer;transition:border-color .25s,transform .2s;}
+.integ-card:active{transform:scale(0.97);}
+.integ-card.open{border-color:var(--accent2);}
+.integ-card .ic-top{display:flex;align-items:center;gap:8px;}
+.integ-card .ic-emoji{font-size:18px;}
+.integ-card .ic-name{font-size:11.5px;font-weight:600;color:#fff;}
+.integ-card .ic-cat{font-size:9px;color:var(--muted);margin-top:1px;}
+.integ-card .ic-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1);}
+.integ-card.open .ic-body{max-height:300px;}
+.integ-card .ic-body-inner{padding-top:10px;border-top:1px solid var(--border);margin-top:10px;}
+.integ-card .ic-body-inner p{font-size:10.5px;color:var(--muted);line-height:1.65;}
+.integ-card .ic-body-inner .ic-steps{margin-top:6px;}
+.integ-card .ic-body-inner .ic-step{font-size:10px;color:var(--cream);padding:3px 0;display:flex;align-items:center;gap:5px;}
+.integ-card .ic-body-inner .ic-step .arrow{color:var(--gold);font-size:9px;}
+
+/* ── CHECKLIST ── */
+.checklist{margin:0 1%;}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.check-item:last-child{border-bottom:none;}
+.check-box{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;margin-top:1px;transition:all .25s;display:flex;align-items:center;justify-content:center;}
+.check-box.done{background:var(--gold);border-color:var(--gold);}
+.check-box.done::after{content:'✓';font-size:11px;color:#0a0a0f;font-weight:700;}
+.check-txt{font-size:11.5px;color:var(--cream);}
+.check-txt .sub{font-size:10px;color:var(--muted);display:block;margin-top:2px;}
+.check-item.done .check-txt{color:var(--muted);}
+
+/* ── PROGRESS ── */
+.progress-wrap{margin:12px 1% 0;}
+.progress-label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px;}
+.progress-bar{background:var(--bg3);border-radius:6px;height:5px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .4s ease;}
+
+/* ── SECTION ── */
+.section{display:none;padding-bottom:76px;}
+.section.active{display:block;}
+
+/* ── GLOSSARY ── */
+.gloss-search{margin:0 1%;position:relative;}
+.gloss-search input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 12px 10px 36px;color:var(--cream);font-size:12px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .25s;}
+.gloss-search input::placeholder{color:var(--muted);}
+.gloss-search input:focus{border-color:var(--accent2);}
+.gloss-search .s-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;}
+.gloss-cats{margin:10px 1% 0;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.gloss-cats::-webkit-scrollbar{display:none;}
+.gloss-cat{flex-shrink:0;font-size:10px;padding:4px 11px;border-radius:16px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.gloss-cat.active{border-color:var(--accent2);color:var(--accent2);background:rgba(167,139,250,0.07);}
+.gloss-list{margin:10px 1% 0;display:flex;flex-direction:column;gap:6px;}
+.gloss-term{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .25s,transform .2s;}
+.gloss-term:active{transform:scale(0.98);}
+.gloss-term.open{border-color:var(--accent2);}
+.gloss-term .gt-head{display:flex;align-items:center;gap:10px;padding:11px 13px;}
+.gloss-term .gt-cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.gloss-term .gt-name{font-size:12.5px;font-weight:600;color:#fff;flex:1;}
+.gloss-term .gt-arrow{font-size:12px;color:var(--muted);transition:transform .3s;}
+.gloss-term.open .gt-arrow{transform:rotate(180deg);}
+.gloss-term .gt-body{max-height:0;overflow:hidden;transition:max-height .38s cubic-bezier(.4,0,.2,1);}
+.gloss-term.open .gt-body{max-height:260px;}
+.gloss-term .gt-inner{padding:0 13px 12px;border-top:1px solid var(--border);padding-top:10px;}
+.gloss-term .gt-inner p{font-size:11px;color:var(--muted);line-height:1.7;}
+.gloss-term .gt-inner .gt-example{margin-top:7px;background:var(--bg3);border-radius:7px;padding:7px 10px;font-size:10.5px;color:var(--cream);line-height:1.6;}
+.gloss-term .gt-inner .gt-example .ex-label{color:var(--gold2);font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:2px;}
+.gloss-term[data-cat="hidden"]{display:none;}
+
+/* ── FAQ ── */
+.faq-list{margin:0 1%;display:flex;flex-direction:column;gap:6px;}
+.faq-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .25s,transform .2s;}
+.faq-card:active{transform:scale(0.98);}
+.faq-card.open{border-color:var(--gold);}
+.faq-head{display:flex;align-items:center;gap:10px;padding:12px 13px;}
+.faq-head .fq-icon{width:26px;height:26px;border-radius:7px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.18);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.faq-head .fq-q{font-size:12px;font-weight:500;color:#fff;flex:1;line-height:1.4;}
+.faq-head .fq-arrow{font-size:12px;color:var(--muted);transition:transform .3s;flex-shrink:0;}
+.faq-card.open .fq-arrow{transform:rotate(180deg);}
+.faq-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1);}
+.faq-card.open .faq-body{max-height:400px;}
+.faq-inner{padding:0 13px 13px;border-top:1px solid var(--border);padding-top:11px;}
+.faq-inner p{font-size:11px;color:var(--muted);line-height:1.75;margin-bottom:6px;}
+.faq-inner p:last-child{margin-bottom:0;}
+
+/* ── CASE STUDY ── */
+.case-hero-strip{margin:0 1%;margin-top:4px;background:linear-gradient(135deg,#1a1520 0%,#121a1a 100%);border:1px solid var(--border);border-radius:14px;padding:18px 15px;position:relative;overflow:hidden;}
+.case-hero-strip::before{content:'';position:absolute;top:-30px;left:-30px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(95,234,192,0.1),transparent 70%);}
+.case-hero-strip::after{content:'';position:absolute;bottom:-25px;right:-25px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.1),transparent 70%);}
+.case-hero-strip .ch-label{font-size:9px;color:var(--teal);font-weight:600;letter-spacing:.12em;text-transform:uppercase;position:relative;}
+.case-hero-strip h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#fff;margin-top:4px;position:relative;line-height:1.25;}
+.case-hero-strip p{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.65;position:relative;}
+.case-hero-strip .ch-tag{display:inline-flex;align-items:center;gap:5px;margin-top:10px;position:relative;}
+.case-hero-strip .ch-tag span{font-size:10px;padding:3px 9px;border-radius:14px;border:1px solid var(--border);color:var(--muted);}
+.case-hero-strip .ch-tag span.hl{border-color:var(--teal);color:var(--teal);}
+
+/* case results grid */
+.case-results{margin:0 1%;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;}
+.case-res-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:12px 10px;text-align:center;}
+.case-res-card .cr-num{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;color:#fff;}
+.case-res-card .cr-num .cr-c{font-size:14px;}
+.case-res-card .cr-lbl{font-size:9px;color:var(--muted);margin-top:2px;line-height:1.4;}
+.case-res-card.green .cr-num .cr-c{color:var(--teal);}
+.case-res-card.gold .cr-num .cr-c{color:var(--gold2);}
+.case-res-card.pink .cr-num .cr-c{color:var(--pink);}
+.case-res-card.purple .cr-num .cr-c{color:var(--accent2);}
+
+/* timeline */
+.timeline{margin:14px 1% 0;position:relative;padding-left:18px;}
+.timeline::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--border);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:16px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-18px;top:4px;width:14px;height:14px;border-radius:50%;border:2px solid var(--bg);z-index:1;}
+.tl-dot.d1{background:var(--accent2);}
+.tl-dot.d2{background:var(--gold2);}
+.tl-dot.d3{background:var(--teal);}
+.tl-dot.d4{background:var(--pink);}
+.tl-dot.d5{background:var(--orange);}
+.tl-item .tl-phase{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
+.tl-phase.p1{color:var(--accent2);} .tl-phase.p2{color:var(--gold2);} .tl-phase.p3{color:var(--teal);} .tl-phase.p4{color:var(--pink);} .tl-phase.p5{color:var(--orange);}
+.tl-item .tl-title{font-size:12.5px;font-weight:600;color:#fff;margin-bottom:3px;}
+.tl-item .tl-desc{font-size:10.5px;color:var(--muted);line-height:1.65;}
+
+/* quote box */
+.case-quote{margin:14px 1% 0;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;position:relative;}
+.case-quote .cq-mark{position:absolute;top:8px;left:12px;font-size:24px;color:var(--border);line-height:1;}
+.case-quote p{font-size:11.5px;color:var(--cream);line-height:1.7;font-style:italic;padding-left:14px;}
+.case-quote .cq-author{margin-top:8px;padding-left:14px;font-size:10px;color:var(--muted);font-style:normal;}
+.case-quote .cq-author strong{color:var(--gold2);font-weight:600;}
+
+/* scrollbar */
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">GHL<span>·AI·HOST</span></div>
+  <div class="tag">2026 Guide</div>
+</div>
+
+<!-- PILL NAV -->
+<div class="pill-nav" id="pillNav">
+  <div class="pill active" data-tab="home"><span class="pill-icon">🏠</span> Home</div>
+  <div class="pill" data-tab="themes"><span class="pill-icon">🎨</span> Themes</div>
+  <div class="pill" data-tab="howto"><span class="pill-icon">📖</span> How-To</div>
+  <div class="pill new-badge" data-tab="pricing"><span class="pill-icon">💰</span> Pricing</div>
+  <div class="pill new-badge" data-tab="compare"><span class="pill-icon">🔊</span> AI Voice</div>
+  <div class="pill new-badge" data-tab="trouble"><span class="pill-icon">🛠</span> Fix Issues</div>
+  <div class="pill new-badge" data-tab="integrations"><span class="pill-icon">🔗</span> Integrations</div>
+  <div class="pill new-badge" data-tab="glossary"><span class="pill-icon">📘</span> Glossary</div>
+  <div class="pill new-badge" data-tab="faq"><span class="pill-icon">❓</span> FAQ</div>
+  <div class="pill new-badge" data-tab="casestudy"><span class="pill-icon">🏆</span> Case Study</div>
+  <div class="pill" data-tab="tasks"><span class="pill-icon">✅</span> Tasks</div>
+</div>
+
+<!-- ═══════ HOME ═══════ -->
+<div class="section active" id="sec-home">
+  <div class="hero">
+    <div class="hero-badge"><div class="dot"></div> 2026 Beginner's Guide</div>
+    <h1>GoHighLevel + <span class="highlight">AI Voice</span><br/> & Hospitality Automations</h1>
+    <p>Your complete starter roadmap to building smart hospitality automations using GoHighLevel and AI-powered voice tools — zero experience needed.</p>
+    <div class="hero-tags">
+      <span class="active">Beginner</span><span>AI Voice</span><span>GHL CRM</span><span>Hotels</span><span>Automations</span>
+    </div>
+  </div>
+  <div class="sec-label"><span>At a Glance</span><div class="line"></div></div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="num">6<span class="c">+</span></div><div class="lbl">Core Steps</div></div>
+    <div class="stat-card"><div class="num">4<span class="c">×</span></div><div class="lbl">Themes</div></div>
+    <div class="stat-card"><div class="num">2<span class="c">h</span></div><div class="lbl">Setup Time</div></div>
+  </div>
+  <div class="sec-label"><div class="line"></div><span>Quick Tips</span></div>
+  <div class="tips-row">
+    <div class="tip-card"><div class="tip-icon">🎯</div><div><h4>Start Simple</h4><p>Begin with one automation — like a guest check-in welcome message — then layer on complexity step by step.</p></div></div>
+    <div class="tip-card"><div class="tip-icon">🔊</div><div><h4>AI Voice Is Key</h4><p>In 2026, AI voice bots handle 60%+ of front-desk inquiries automatically. Master this first for maximum ROI.</p></div></div>
+    <div class="tip-card"><div class="tip-icon">⚡</div><div><h4>Test Everything</h4><p>Use GHL's built-in sandbox to test every workflow before going live. Saves hours of troubleshooting.</p></div></div>
+  </div>
+  <div class="cta-block">
+    <h3>Ready to Build?</h3>
+    <p>Tap "How-To" to follow the step-by-step setup guide.</p>
+    <button class="cta-btn" onclick="goTab('howto')">Start Building →</button>
+  </div>
+</div>
+
+<!-- ═══════ THEMES ═══════ -->
+<div class="section" id="sec-themes">
+  <div class="hero" style="padding-bottom:10px;">
+    <div class="hero-badge"><div class="dot"></div> Layout & Themes</div>
+    <h1>Choose Your <span class="highlight">Automation Theme</span></h1>
+    <p>Pick a hospitality automation layout that matches your property type and goals.</p>
+  </div>
+  <div class="sec-label"><div class="line"></div><span>4 Popular Themes</span></div>
+  <div class="acc-list" id="themes-list">
+    <div class="acc-card open gold-open" onclick="toggleAcc(this,'themes-list')">
+      <div class="acc-head"><div class="acc-icon gold">🏨</div><div class="acc-info"><h3>Luxury Hotel Suite</h3><p>High-end concierge automations</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>Designed for 5-star properties needing white-glove AI service. Every touchpoint is personalized — from pre-arrival preferences to post-checkout thank-you sequences.</p>
+        <div class="step-mini"><div class="sn">1</div><div class="st"><strong>AI Welcome Call</strong> <span class="dim">— Triggered 2 hrs before check-in. AI voice greets guest by name and confirms reservation.</span></div></div>
+        <div class="step-mini"><div class="sn">2</div><div class="st"><strong>Concierge Flow</strong> <span class="dim">— Guest requests room service, spa, transport via SMS. GHL routes to the right team.</span></div></div>
+        <div class="step-mini"><div class="sn">3</div><div class="st"><strong>Checkout & Follow-Up</strong> <span class="dim">— Auto survey + review request 24hrs after checkout with personalized AI message.</span></div></div>
+      </div></div>
+    </div>
+    <div class="acc-card gold-open" onclick="toggleAcc(this,'themes-list')">
+      <div class="acc-head"><div class="acc-icon purple">🏡</div><div class="acc-info"><h3>Boutique Airbnb Manager</h3><p>Short-stay rental automation</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>For short-term rental hosts managing multiple properties. Automates guest communications, key-code delivery, cleaning schedules, and review follow-ups in one GHL dashboard.</p>
+        <div class="step-mini"><div class="sn">1</div><div class="st"><strong>Booking Confirmation</strong> <span class="dim">— Instant AI voice call confirming booking + property address + check-in time.</span></div></div>
+        <div class="step-mini"><div class="sn">2</div><div class="st"><strong>Key Code Delivery</strong> <span class="dim">— Auto-send door code 1 hour before check-in via SMS with property photos.</span></div></div>
+        <div class="step-mini"><div class="sn">3</div><div class="st"><strong>Clean & Turnover</strong> <span class="dim">— Triggers cleaning team notification the moment a guest checks out.</span></div></div>
+      </div></div>
+    </div>
+    <div class="acc-card gold-open" onclick="toggleAcc(this,'themes-list')">
+      <div class="acc-head"><div class="acc-icon teal">🏖️</div><div class="acc-info"><h3>Resort & Spa Flow</h3><p>Experience-driven guest journeys</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>Built for resorts where the "experience" is the product. Maps the entire guest journey — from first inquiry to post-visit nurturing — using AI voice and automated drip campaigns.</p>
+        <div class="step-mini"><div class="sn">1</div><div class="st"><strong>Inquiry Handler</strong> <span class="dim">— AI voice answers availability questions 24/7 and captures lead info into GHL CRM.</span></div></div>
+        <div class="step-mini"><div class="sn">2</div><div class="st"><strong>Spa Booking Drip</strong> <span class="dim">— 3-step SMS sequence offering spa add-ons during their stay.</span></div></div>
+        <div class="step-mini"><div class="sn">3</div><div class="st"><strong>Loyalty Nurture</strong> <span class="dim">— Post-stay email + SMS campaign to re-engage past guests with offers.</span></div></div>
+      </div></div>
+    </div>
+    <div class="acc-card gold-open" onclick="toggleAcc(this,'themes-list')">
+      <div class="acc-head"><div class="acc-icon pink">🚗</div><div class="acc-info"><h3>Travel & Transport Hub</h3><p>Arrival logistics automation</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>For properties offering airport transfers or shuttle services. AI voice handles pickup confirmations and GHL automates the entire logistics chain.</p>
+        <div class="step-mini"><div class="sn">1</div><div class="st"><strong>Transfer Booking</strong> <span class="dim">— AI voice call confirms flight arrival, pickup time and vehicle type.</span></div></div>
+        <div class="step-mini"><div class="sn">2</div><div class="st"><strong>Driver Alerts</strong> <span class="dim">— Auto-notify drivers 90 min before pickup with guest details.</span></div></div>
+        <div class="step-mini"><div class="sn">3</div><div class="st"><strong>Arrival Welcome</strong> <span class="dim">— SMS welcome sent when guest's transport arrives at the property.</span></div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ HOW-TO ═══════ -->
+<div class="section" id="sec-howto">
+  <div class="hero" style="padding-bottom:10px;">
+    <div class="hero-badge"><div class="dot"></div> Step-by-Step</div>
+    <h1>How To <span class="highlight">Build & Create</span><br/>Your Automation</h1>
+    <p>Follow these 6 steps to set up GoHighLevel with AI voice and hospitality automations from scratch.</p>
+  </div>
+  <div class="sec-label"><div class="line"></div><span>6 Steps to Launch</span></div>
+  <div class="acc-list" id="howto-list">
+    <div class="acc-card open" onclick="toggleAcc(this,'howto-list')">
+      <div class="acc-head"><div class="acc-icon purple" style="font-size:14px;font-weight:800;font-family:'Syne',sans-serif;color:#fff;">01</div><div class="acc-info"><h3>Create Your GHL Account</h3><p>Sign up and configure basics</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>GoHighLevel is your central command center. Sign up at <strong class="w">gohighlevel.com</strong> — choose the Agency plan (recommended). You'll get a 14-day free trial.</p>
+        <p>During setup, select <strong class="w">"Hospitality"</strong> as your industry. This pre-loads relevant templates and workflow triggers built for hotels and rentals.</p>
+        <div class="tip-box gold-tip"><strong>💡 Pro Tip:</strong> Use a dedicated Google Workspace email. This keeps your automation emails clean and professional.</div>
+      </div></div>
+    </div>
+    <div class="acc-card" onclick="toggleAcc(this,'howto-list')">
+      <div class="acc-head"><div class="acc-icon gold" style="font-size:14px;font-weight:800;font-family:'Syne',sans-serif;color:#fff;">02</div><div class="acc-info"><h3>Connect Your AI Voice Tool</h3><p>Link Bland AI, VAPI, or Retell</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>GHL integrates with AI voice platforms like <strong class="w">Bland AI</strong>, <strong class="w">VAPI</strong>, and <strong class="w">Retell AI</strong>. These power the automated phone calls that greet and assist your guests.</p>
+        <div class="code-block">Settings → Integrations → AI Voice<br/>Paste API Key → Select Voice<br/>Test Call → Confirm Connection ✓</div>
+        <div class="tip-box"><strong>💡 Pro Tip:</strong> Record a short test call to yourself first. Adjust voice speed and tone before it touches a real guest.</div>
+      </div></div>
+    </div>
+    <div class="acc-card" onclick="toggleAcc(this,'howto-list')">
+      <div class="acc-head"><div class="acc-icon teal" style="font-size:14px;font-weight:800;font-family:'Syne',sans-serif;color:#0a0a0f;">03</div><div class="acc-info"><h3>Set Up Your First Workflow</h3><p>Trigger + actions chain</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>Workflows are the heart of hospitality automation. Each workflow = a trigger + actions. Start with: <strong class="w">"New Booking → Welcome Message."</strong></p>
+        <div class="code-block">Trigger: Booking Confirmed<br/>Action 1: Send AI Voice Call<br/>Action 2: Send SMS (key info)<br/>Action 3: Tag Lead → "Checked In"</div>
+        <div class="tip-box"><strong>💡 Pro Tip:</strong> Always add a "Wait" step between actions (e.g., 30 min delay) so guests aren't overwhelmed.</div>
+      </div></div>
+    </div>
+    <div class="acc-card" onclick="toggleAcc(this,'howto-list')">
+      <div class="acc-head"><div class="acc-icon pink" style="font-size:14px;font-weight:800;font-family:'Syne',sans-serif;color:#fff;">04</div><div class="acc-info"><h3>Design AI Voice Scripts</h3><p>Write what guests hear</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>Keep scripts short (under 30 seconds), warm, and professional. Use <strong class="w">dynamic variables</strong> like <code style="color:var(--teal);font-size:11px">[Guest Name]</code> and <code style="color:var(--teal);font-size:11px">[Check-in Date]</code> to personalize.</p>
+        <div class="code-block">"Hello [Guest Name], this is<br/>[Property Name]. Your stay<br/>starting [Check-in Date] is<br/>confirmed. Press 1 for info,<br/>or we'll see you soon!"</div>
+        <div class="tip-box"><strong>💡 Pro Tip:</strong> Always end with a clear next action — "Press 1 to…" keeps guests engaged and captures intent.</div>
+      </div></div>
+    </div>
+    <div class="acc-card" onclick="toggleAcc(this,'howto-list')">
+      <div class="acc-head"><div class="acc-icon orange" style="font-size:14px;font-weight:800;font-family:'Syne',sans-serif;color:#fff;">05</div><div class="acc-info"><h3>Build the Guest Journey Map</h3><p>Map every touchpoint</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>A Guest Journey Map assigns an automation to every stage — from first contact to post-checkout follow-up.</p>
+        <p>Typical stages: <strong class="w">Inquiry → Booking → Pre-Arrival → Check-In → During Stay → Checkout → Follow-Up → Loyalty.</strong></p>
+        <p>Use GHL's <strong class="w">Pipeline View</strong> to visualize guests moving through each stage. Each stage can trigger a different workflow automatically.</p>
+        <div class="tip-box gold-tip"><strong>💡 Pro Tip:</strong> Start with just 3 stages (Booking, Check-In, Checkout). Add more as you get comfortable.</div>
+      </div></div>
+    </div>
+    <div class="acc-card" onclick="toggleAcc(this,'howto-list')">
+      <div class="acc-head"><div class="acc-icon blue" style="font-size:14px;font-weight:800;font-family:'Syne',sans-serif;color:#fff;">06</div><div class="acc-info"><h3>Test, Launch & Optimize</h3><p>Go live safely</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>Run each workflow in <strong class="w">Test Mode</strong> using a fake guest profile. Check that AI voice calls connect, SMS messages send correctly, and tags are applied.</p>
+        <div class="code-block">Test Mode → Fake Guest Profile<br/>Run All Workflows → Check Logs<br/>Go Live → Monitor Dashboard<br/>Week 1: Optimize daily ✓</div>
+        <div class="tip-box"><strong>💡 Pro Tip:</strong> Set up a weekly 15-min review of analytics. Small tweaks compound into big guest satisfaction gains.</div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ PRICING ═══════ -->
+<div class="section" id="sec-pricing">
+  <div class="hero" style="padding-bottom:10px;">
+    <div class="hero-badge"><div class="dot"></div> New · Pricing</div>
+    <h1>GHL <span class="highlight">Pricing Breakdown</span></h1>
+    <p>Which plan do you actually need? Honest breakdown for hospitality beginners — no fluff.</p>
+  </div>
+  <div class="sec-label"><div class="line"></div><span>3 Plans Compared</span></div>
+  <div class="price-grid">
+
+    <!-- Starter -->
+    <div class="price-card">
+      <div class="price-top">
+        <div class="p-left"><h3>Starter</h3><p>Solo property owner</p></div>
+        <div class="p-right"><div class="amount">$97<span class="per">/mo</span></div></div>
+      </div>
+      <div class="price-feats">
+        <div class="pf"><div class="tick yes">✓</div> 1 location / sub-account</div>
+        <div class="pf"><div class="tick yes">✓</div> Basic CRM + pipeline</div>
+        <div class="pf"><div class="tick yes">✓</div> SMS & email automations</div>
+        <div class="pf"><div class="tick yes">✓</div> Website builder included</div>
+        <div class="pf"><div class="tick no">✗</div> No white-label features</div>
+        <div class="pf"><div class="tick no">✗</div> No AI voice built-in (use external)</div>
+        <div class="pf"><div class="tick maybe">~</div> Basic workflow triggers only</div>
+      </div>
+    </div>
+
+    <!-- Unlimited (Featured) -->
+    <div class="price-card featured">
+      <div class="feat-badge">BEST FOR HOSPITALITY</div>
+      <div class="price-top" style="padding-top:24px;">
+        <div class="p-left"><h3>Unlimited</h3><p>Growing hotel or rental</p></div>
+        <div class="p-right"><div class="amount">$297<span class="per">/mo</span></div></div>
+      </div>
+      <div class="price-feats">
+        <div class="pf"><div class="tick yes">✓</div> Unlimited locations</div>
+        <div class="pf"><div class="tick yes">✓</div> Full CRM + advanced pipeline</div>
+        <div class="pf"><div class="tick yes">✓</div> Advanced automations & workflows</div>
+        <div class="pf"><div class="tick yes">✓</div> AI chatbot included</div>
+        <div class="pf"><div class="tick yes">✓</div> White-label ready</div>
+        <div class="pf"><div class="tick maybe">~</div> AI voice via integration (extra cost)</div>
+        <div class="pf"><div class="tick yes">✓</div> Priority support</div>
+      </div>
+    </div>
+
+    <!-- Agency -->
+    <div class="price-card">
+      <div class="price-top">
+        <div class="p-left"><h3>Agency Pro</h3><p>Multiple properties / resale</p></div>
+        <div class="p-right"><div class="amount">$497<span class="per">/mo</span></div></div>
+      </div>
+      <div class="price-feats">
+        <div class="pf"><div class="tick yes">✓</div> Everything in Unlimited</div>
+        <div class="pf"><div class="tick yes">✓</div> Resell GHL to other businesses</div>
+        <div class="pf"><div class="tick yes">✓</div> Advanced reporting & analytics</div>
+        <div class="pf"><div class="tick yes">✓</div> Dedicated onboarding support</div>
+        <div class="pf"><div class="tick yes">✓</div> Custom domain + branding</div>
+        <div class="pf"><div class="tick yes">✓</div> AI voice integration priority</div>
+        <div class="pf"><div class="tick yes">✓</div> 24/7 VIP support</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-box gold-tip" style="margin:14px 1% 0;">
+    <strong>💡 Beginner Recommendation:</strong> Start on <strong>Unlimited ($297/mo)</strong>. It has everything you need for a single or small multi-property hospitality setup. Upgrade to Agency only when you're reselling GHL or managing 5+ properties.
+  </div>
+
+  <div class="tip-box" style="margin:10px 1% 0;">
+    <strong>💰 Hidden Costs to Know:</strong> AI voice platforms (Bland, VAPI, Retell) cost extra — typically $30–$90/mo depending on call volume. SMS credits are included but high-volume usage may trigger overages. Budget ~$350–$400/mo total for a solid hospitality stack.
+  </div>
+</div>
+
+<!-- ═══════ AI VOICE COMPARE ═══════ -->
+<div class="section" id="sec-compare">
+  <div class="hero" style="padding-bottom:10px;">
+    <div class="hero-badge"><div class="dot"></div> New · AI Voice</div>
+    <h1>AI Voice Platform <span class="highlight">Comparison</span></h1>
+    <p>Bland AI vs VAPI vs Retell AI — which one is actually best for hospitality? Broken down simply.</p>
+  </div>
+
+  <div class="sec-label"><div class="line"></div><span>Quick Compare</span></div>
+  <div class="compare-wrap">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th style="text-align:left;width:38%;">Feature</th>
+          <th><span class="th-name">Bland</span><span class="th-price">~$50/mo</span></th>
+          <th class="highlight-col"><span class="th-name">VAPI</span><span class="th-price">~$30/mo</span></th>
+          <th><span class="th-name">Retell</span><span class="th-price">~$60/mo</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Voice Quality</td><td class="badge-cell"><span class="b good">Good</span></td><td class="badge-cell highlight-col"><span class="b good">Good</span></td><td class="badge-cell"><span class="b best">Best</span></td></tr>
+        <tr><td>GHL Integration</td><td class="badge-cell"><span class="b good">Good</span></td><td class="badge-cell highlight-col"><span class="b best">Best</span></td><td class="badge-cell"><span class="b ok">OK</span></td></tr>
+        <tr><td>Price / Value</td><td class="badge-cell"><span class="b ok">OK</span></td><td class="badge-cell highlight-col"><span class="b best">Best</span></td><td class="badge-cell"><span class="b good">Good</span></td></tr>
+        <tr><td>Call Handling</td><td class="badge-cell"><span class="b good">Good</span></td><td class="badge-cell highlight-col"><span class="b good">Good</span></td><td class="badge-cell"><span class="b best">Best</span></td></tr>
+        <tr><td>Setup Ease</td><td class="badge-cell"><span class="b best">Best</span></td><td class="badge-cell highlight-col"><span class="b good">Good</span></td><td class="badge-cell"><span class="b ok">OK</span></td></tr>
+        <tr><td>Multilingual</td><td class="badge-cell"><span class="b ok">Limited</span></td><td class="badge-cell highlight-col"><span class="b good">Good</span></td><td class="badge-cell"><span class="b best">Best</span></td></tr>
+        <tr><td>Free Trial</td><td class="badge-cell"><span class="b best">14 days</span></td><td class="badge-cell highlight-col"><span class="b best">Free tier</span></td><td class="badge-cell"><span class="b good">7 days</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="compare-legend">
+    <div class="leg"><div class="ld best"></div>Best</div>
+    <div class="leg"><div class="ld good"></div>Good</div>
+    <div class="leg"><div class="ld ok"></div>Average</div>
+  </div>
+
+  <div class="sec-label"><div class="line"></div><span>Platform Deep Dives</span></div>
+  <div class="acc-list" id="voice-list">
+    <div class="acc-card open teal-open" onclick="toggleAcc(this,'voice-list')">
+      <div class="acc-head"><div class="acc-icon teal">🎙️</div><div class="acc-info"><h3>VAPI — Best for Beginners</h3><p>Cheapest entry + best GHL fit</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>VAPI is the go-to pick for most hospitality beginners in 2026. It has a free tier to test with, the cheapest paid plans, and the smoothest integration with GoHighLevel out of the box.</p>
+        <p><strong class="w">Why choose VAPI:</strong> You're just starting, budget is tight, and you want the fastest path from signup to a working AI voice call inside GHL.</p>
+        <div class="code-block">1. Sign up at vapi.ai<br/>2. Create a new Assistant<br/>3. Copy your API Key<br/>4. Paste into GHL → AI Voice<br/>5. Test call in 5 minutes ✓</div>
+        <div class="tip-box teal-tip"><strong>⚡ Setup Time:</strong> Under 10 minutes from signup to first working call.</div>
+      </div></div>
+    </div>
+    <div class="acc-card teal-open" onclick="toggleAcc(this,'voice-list')">
+      <div class="acc-head"><div class="acc-icon gold">🎤</div><div class="acc-info"><h3>Bland AI — Easiest to Use</h3><p>Most beginner-friendly interface</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>Bland AI has the simplest dashboard of all three. If you've never touched an AI tool before, Bland's drag-and-drop script builder will feel the most natural.</p>
+        <p><strong class="w">Why choose Bland:</strong> You're uncomfortable with technical setups and want a very visual, guided experience to build your voice scripts.</p>
+        <div class="code-block">1. Sign up at bland.ai<br/>2. Use Script Builder (drag & drop)<br/>3. Export → Copy API Key<br/>4. Connect to GHL<br/>5. Preview voice before live ✓</div>
+        <div class="tip-box gold-tip"><strong>⚡ Best for:</strong> People who want to "see it work" before committing to a paid plan.</div>
+      </div></div>
+    </div>
+    <div class="acc-card teal-open" onclick="toggleAcc(this,'voice-list')">
+      <div class="acc-head"><div class="acc-icon pink">🏆</div><div class="acc-info"><h3>Retell AI — Best Voice Quality</h3><p>Most natural-sounding calls</p></div><div class="acc-arrow">▼</div></div>
+      <div class="acc-body"><div class="acc-inner">
+        <p>If guest experience is everything (think luxury hotels), Retell AI produces the most natural, human-like voice of the three. Guests often can't tell it's AI.</p>
+        <p><strong class="w">Why choose Retell:</strong> You manage a high-end property and voice quality directly impacts your brand perception and guest satisfaction scores.</p>
+        <div class="code-block">1. Sign up at retellai.com<br/>2. Choose a voice + language<br/>3. Write/upload your script<br/>4. Get API Key → Connect GHL<br/>5. A/B test voice tones ✓</div>
+        <div class="tip-box" style="background:rgba(240,108,176,0.08);border-color:rgba(240,108,176,0.2);color:var(--pink);"><strong>⚡ Premium Pick:</strong> Slightly more complex setup but delivers the best guest impression. Worth it for 4-5 star properties.</div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TROUBLESHOOTING ═══════ -->
+<div class="section" id="sec-trouble">
+  <div class="hero" style="padding-bottom:10px;">
+    <div class="hero-badge"><div class="dot"></div> New · Fix Issues</div>
+    <h1>Troubleshooting <span class="highlight">Guide</span></h1>
+    <p>The most common problems beginners hit — and exactly how to fix them. Fast.</p>
+  </div>
+  <div class="sec-label"><div class="line"></div><span>7 Common Issues</span></div>
+  <div class="trouble-list" id="trouble-list">
+
+    <div class="trouble-card open" onclick="toggleTrouble(this)">
+      <div class="trouble-head">
+        <div class="t-icon">📞</div>
+        <div class="t-info"><h3>AI Voice Calls Are Dropping</h3><span class="t-tag calls">Calls</span></div>
+        <div class="trouble-arrow">▼</div>
+      </div>
+      <div class="trouble-body"><div class="trouble-inner">
+        <div class="cause"><div class="cl">⚡ Why It Happens</div><p>Usually a connection timeout between GHL and your AI voice platform. The API call goes out but the voice tool doesn't respond in time.</p></div>
+        <div class="fix"><div class="fl">✅ FIX</div><p>Go to <strong>Settings → AI Voice → Connection</strong> and increase the timeout to 10 seconds. Also check that your API key hasn't expired — regenerate it if it's older than 30 days. If calls still drop, switch to VAPI which has the most stable GHL connection.</p></div>
+      </div></div>
+    </div>
+
+    <div class="trouble-card" onclick="toggleTrouble(this)">
+      <div class="trouble-head">
+        <div class="t-icon">📱</div>
+        <div class="t-info"><h3>SMS Messages Not Delivering</h3><span class="t-tag sms">SMS</span></div>
+        <div class="trouble-arrow">▼</div>
+      </div>
+      <div class="trouble-body"><div class="trouble-inner">
+        <div class="cause"><div class="cl">⚡ Why It Happens</div><p>SMS delivery fails when: (1) the guest's number format is wrong (missing country code), (2) your GHL phone number isn't verified, or (3) you've hit your daily SMS limit.</p></div>
+        <div class="fix"><div class="fl">✅ FIX</div><p>Always store numbers in international format (+1 for US, +44 for UK, etc.). Go to <strong>Settings → Phone Numbers</strong> and verify your sending number. Check <strong>Dashboard → SMS Credits</strong> — if you're at 0, add credits before the next send.</p></div>
+      </div></div>
+    </div>
+
+    <div class="trouble-card" onclick="toggleTrouble(this)">
+      <div class="trouble-head">
+        <div class="t-icon">⚙️</div>
+        <div class="t-info"><h3>Workflow Not Triggering</h3><span class="t-tag workflow">Workflow</span></div>
+        <div class="trouble-arrow">▼</div>
+      </div>
+      <div class="trouble-body"><div class="trouble-inner">
+        <div class="cause"><div class="cl">⚡ Why It Happens</div><p>The #1 cause: the workflow is saved as a <strong>Draft</strong> instead of being published. Second most common: the trigger condition doesn't match what's actually happening (e.g., trigger set to "Booking Confirmed" but bookings come in as "Lead Created").</p></div>
+        <div class="fix"><div class="fl">✅ FIX</div><p>Open your workflow → check the status toggle in the top-right. It must say <strong>Published</strong> (green). Then go to the trigger step and verify the exact event name matches your incoming data. Use the <strong>Test Mode</strong> button to manually fire the trigger and watch it execute step by step.</p></div>
+      </div></div>
+    </div>
+
+    <div class="trouble-card" onclick="toggleTrouble(this)">
+      <div class="trouble-head">
+        <div class="t-icon">🔗</div>
+        <div class="t-info"><h3>AI Voice Integration Failing</h3><span class="t-tag setup">Setup</span></div>
+        <div class="trouble-arrow">▼</div>
+      </div>
+      <div class="trouble-body"><div class="trouble-inner">
+        <div class="cause"><div class="cl">⚡ Why It Happens</div><p>API key is wrong, expired, or you're using a test key instead of a live key. Some voice platforms require an extra "activation" step before the API key works.</p></div>
+        <div class="fix"><div class="fl">✅ FIX</div><p>Log into your voice platform dashboard. Delete your current API key and generate a brand new one. Make sure you select <strong>"Live"</strong> (not Test) when creating it. Copy it fresh → paste into GHL → hit the green <strong>Test Connection</strong> button. If it still fails, check that your voice platform account is on a paid plan (free tiers sometimes block API access).</p></div>
+      </div></div>
+    </div>
+
+    <div class="trouble-card" onclick="toggleTrouble(this)">
+      <div class="trouble-head">
+        <div class="t-icon">👤</div>
+        <div class="t-info"><h3>Guest Names Showing as [blank]</h3><span class="t-tag workflow">Workflow</span></div>
+        <div class="trouble-arrow">▼</div>
+      </div>
+      <div class="trouble-body"><div class="trouble-inner">
+        <div class="cause"><div class="cl">⚡ Why It Happens</div><p>The dynamic variable [Guest Name] pulls from the CRM contact record. If the contact was created without a first name (common with auto-imports), the field is empty and shows as blank in your voice script.</p></div>
+        <div class="fix"><div class="fl">✅ FIX</div><p>Add a step before your AI voice call that checks if "First Name" is empty. If it is, add a fallback — either a default like "Valued Guest" or trigger an SMS asking for their name first. In GHL: <strong>Add Step → Condition → If First Name is Empty → Set to "Guest"</strong>.</p></div>
+      </div></div>
+    </div>
+
+    <div class="trouble-card" onclick="toggleTrouble(this)">
+      <div class="trouble-head">
+        <div class="t-icon">📬</div>
+        <div class="t-info"><h3>Emails Going to Spam</h3><span class="t-tag sms">Email</span></div>
+        <div class="trouble-arrow">▼</div>
+      </div>
+      <div class="trouble-body"><div class="trouble-inner">
+        <div class="cause"><div class="cl">⚡ Why It Happens</div><p>GHL sends from a generic domain by default. Email providers flag this as spam because there's no SPF/DKIM authentication matching your property's brand.</p></div>
+        <div class="fix"><div class="fl">✅ FIX</div><p>Connect your own Google Workspace email to GHL under <strong>Settings → Email → Custom Domain</strong>. Then set up SPF and DKIM records (GHL gives you the exact records to copy). This tells email providers "yes, this email is really from us." Takes about 15 minutes and fixes 90% of spam issues.</p></div>
+      </div></div>
+    </div>
+
+    <div class="trouble-card" onclick="toggleTrouble(this)">
+      <div class="trouble-head">
+        <div class="t-icon">🔄</div>
+        <div class="t-info"><h3>Automation Running Multiple Times</h3><span class="t-tag workflow">Workflow</span></div>
+        <div class="trouble-arrow">▼</div>
+      </div>
+      <div class="trouble-body"><div class="trouble-inner">
+        <div class="cause"><div class="cl">⚡ Why It Happens</div><p>The workflow has no "run once" limit. Every time the trigger fires (even if it's the same contact), the whole flow repeats — sending duplicate messages to the guest.</p></div>
+        <div class="fix"><div class="fl">✅ FIX</div><p>Open the workflow → click <strong>Settings (gear icon)</strong> → enable <strong>"Run Once Per Contact"</strong>. This ensures each guest only goes through the flow once. If you need it to run again (e.g., for a return guest), you can manually re-enroll them or set a time-based reset (e.g., "allow again after 90 days").</p></div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════ INTEGRATIONS ═══════ -->
+<div class="section" id="sec-integrations">
+  <div class="hero" style="padding-bottom:10px;">
+    <div class="hero-badge"><div class="dot"></div> New · Integrations</div>
+    <h1>Integration <span class="highlight">Map</span></h1>
+    <p>Which tools connect to GHL and actually matter for hospitality? Tap each to see how to set it up.</p>
+  </div>
+
+  <!-- Booking Platforms -->
+  <div class="integ-group">
+    <div class="integ-group-label"><span>Booking Platforms</span><div class="igl-line"></div></div>
+    <div class="integ-cards">
+      <div class="integ-card open" onclick="toggleInteg(this)">
+        <div class="ic-top"><span class="ic-emoji">🏨</span><div><div class="ic-name">Booking.com</div><div class="ic-cat">OTA Sync</div></div></div>
+        <div class="ic-body"><div class="ic-body-inner">
+          <p>Syncs reservations from Booking.com directly into GHL CRM. Every new booking auto-creates a contact and triggers your welcome workflow.</p>
+          <div class="ic-steps">
+            <div class="ic-step"><span class="arrow">→</span> Settings → Integrations → Booking.com</div>
+            <div class="ic-step"><span class="arrow">→</span> Link your Booking manager account</div>
+            <div class="ic-step"><span class="arrow">→</span> Enable auto-sync → Done ✓</div>
+          </div>
+        </div></div>
+      </div>
+      <div class="integ-card" onclick="toggleInteg(this)">
+        <div class="ic-top"><span class="ic-emoji">🏡</span><div><div class="ic-name">Airbnb</div><div class="ic-cat">OTA Sync</div></div></div>
+        <div class="ic-body"><div class="ic-body-inner">
+          <p>Pulls Airbnb reservations into GHL. Use a middleware like Guesty or direct API if you have developer access.</p>
+          <div class="ic-steps">
+            <div class="ic-step"><span class="arrow">→</span> Connect via Guesty or direct API</div>
+            <div class="ic-step"><span class="arrow">→</span> Map guest fields to GHL contacts</div>
+            <div class="ic-step"><span class="arrow">→</span> Test with a dummy booking ✓</div>
+          </div>
+        </div></div>
+      </div>
+      <div class="integ-card" onclick="toggleInteg(this)">
+        <div class="ic-top"><span class="ic-emoji">✈️</span><div><div class="ic-name">Expedia</div><div class="ic-cat">OTA Sync</div></div></div>
+        <div class="ic-body"><div class="ic-body-inner">
+          <p>Similar to Booking.com — syncs Expedia reservations. Best done through a Property Management System (PMS) that connects to both Expedia and GHL.</p>
+          <div class="ic-steps">
+            <div class="ic-step"><span class="arrow">→</span> Use a PMS bridge (e.g., Cloudbeds)</div>
+            <div class="ic-step"><span class="arrow">→</span> Connect PMS → GHL via webhook</div>
+            <div class="ic-step"><span class="arrow">→</span> Auto-sync active ✓</div>
+          </div>
+        </div></div>
+      </div>
+      <div class="integ-card" onclick="toggleInteg(this)">
+        <div class="ic-top"><span class="ic-emoji">📅</span><div><div class="ic-name">Google Calendar</div><div class="ic-cat">Scheduling</div></div></div>
+        <div class="ic-body"><div class="ic-body-inner">
+          <p>Syncs your property calendar with GHL. When a booking is confirmed in GHL, it auto-blocks the dates on your Google Calendar.</p>
+          <div class="ic-steps">
+            <div class="ic-step"><span class="arrow">→</span> Settings → Google → Calendar Sync</div>
+            <div class="ic-step"><span class="arrow">→</span> Authorize Google account</div>
+            <div class="ic-step"><span class="arrow">→</span> Two-way sync enabled ✓</div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Communication -->
+  <div class="integ-group">
+    <div class="integ-group-label"><span>Communication</span><div class="igl-line"></div></div>
+    <div class="integ-cards">
+      <div class="integ-card" onclick="toggleInteg(this)">
+        <div class="ic-top"><span class="ic-emoji">💬</span><div><div class="ic-name">WhatsApp</div><div class="ic-cat">Messaging</div></div></div>
+        <div class="ic-body"><div class="ic-body-inner">
+          <p>Send guest communications via WhatsApp — huge for international guests. GHL sends WhatsApp messages as part of your automation workflows.</p>
+          <div class="ic-steps">
+            <div class="ic-step"><span class="arrow">→</span> Settings → WhatsApp Business</div>
+            <div class="ic-step"><span class="arrow">→</span> Link your Business number</div>
+            <div class="ic-step"><span class="arrow">→</span> Add "Send WhatsApp" to workflows ✓</div>
+          </div>
+        </div></div>
+      </div>
+      <div class="integ-card" onclick="toggleInteg(this)">
+        <div class="ic-top"><span class="ic-emoji">📧</span><div><div class="ic-name">Google Workspace</div><div class="ic-cat">Email</div></div></div>
+        <div class="ic-body"><div class="ic-body-inner">
+          <p>Connects your business email to GHL so all automated emails come from your brand domain — not a generic GHL address. Critical for deliverability.</p>
+          <div class="ic-steps">
+            <div class="ic-step"><span class="arrow">→</span> Settings → Email → SMTP Setup</div>
+            <div class="ic-step"><span class="arrow">→</span> Enter Google Workspace credentials</div>
+            <div class="ic-step"><span class="arrow">→</span> Set SPF + DKIM records ✓</div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI & Automation -->
+  <div class="integ-group">
+    <div class="integ-group-label"><span>AI & Automation</span><div class="igl-line"></div></div>
+    <div class="integ-cards">
+      <div class="integ-card" onclick="toggleInteg(this)">
+        <div class="ic-top"><span class="ic-emoji">🔊</span><div><div class="ic-name">VAPI</div><div class="ic-cat">AI Voice</div></div></div>
+        <div class="ic-body"><div class="ic-body-inner">
+          <p>The recommended AI voice integration for GHL. Powers automated guest calls. See the AI Voice comparison tab for full details on setup.</p>
+          <div class="ic-steps">
+            <div class="ic-step"><span class="arrow">→</span> Create VAPI account → get API key</div>
+            <div class="ic-step"><span class="arrow">→</span> GHL Settings → AI Voice → Paste key</div>
+            <div class="ic-step"><span class="arrow">→</span> Test call → Live ✓</div>
+          </div>
+        </div></div>
+      </div>
+      <div class="integ-card" onclick="toggleInteg(this)">
+        <div class="ic-top"><span class="ic-emoji">⚡</span><div><div class="ic-name">Zapier</div><div class="ic-cat">Automation</div></div></div>
+        <div class="ic-body"><div class="ic-body-inner">
+          <p>Zapier bridges GHL with tools that don't have direct integrations. Great for connecting niche property tools or custom triggers.</p>
+          <div class="ic-steps">
+            <div class="ic-step"><span class="arrow">→</span> Create a Zap with GHL as trigger</div>
+            <div class="ic-step"><span class="arrow">→</span> Connect target app as action</div>
+            <div class="ic-step"><span class="arrow">→</span> Test & activate the Zap ✓</div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ CASE STUDY ═══════ -->
+<div class="section" id="sec-casestudy">
+  <div class="hero" style="padding-bottom:10px;">
+    <div class="hero-badge"><div class="dot"></div> New · Real Story</div>
+    <h1>A Real <span class="highlight">Case Study</span></h1>
+    <p>How one boutique hotel went from zero automations to a fully AI-powered guest experience in 3 weeks. The full breakdown.</p>
+  </div>
+
+  <!-- Property intro card -->
+  <div class="case-hero-strip">
+    <div class="ch-label">Case Study · 2025</div>
+    <h3>The Maplewood Boutique Hotel</h3>
+    <p>A 42-room boutique hotel in Austin, TX. Run by a 3-person team. Zero tech background. Built their entire GHL + AI voice automation stack from scratch.</p>
+    <div class="ch-tag">
+      <span>42 Rooms</span>
+      <span class="hl">3-Person Team</span>
+      <span>Austin, TX</span>
+      <span>3 Weeks Setup</span>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="sec-label"><div class="line"></div><span>Results After 60 Days</span></div>
+  <div class="case-results">
+    <div class="case-res-card green"><div class="cr-num">40<span class="cr-c">%</span></div><div class="cr-lbl">Reduction in front-desk phone calls</div></div>
+    <div class="case-res-card gold"><div class="cr-num">4.8<span class="cr-c">★</span></div><div class="cr-lbl">Average guest rating (was 4.2)</div></div>
+    <div class="case-res-card pink"><div class="cr-num">$12<span class="cr-c">k</span></div><div class="cr-lbl">Extra revenue from spa upsells</div></div>
+    <div class="case-res-card purple"><div class="cr-num">67<span class="cr-c">%</span></div><div class="cr-lbl">More review responses received</div></div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="sec-label"><div class="line"></div><span>How They Did It</span></div>
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-dot d1"></div>
+      <div class="tl-phase p1">Week 1 · Days 1–3</div>
+      <div class="tl-title">Account Setup & Planning</div>
+      <div class="tl-desc">Signed up for GHL Unlimited. Connected Google Workspace email. Chose VAPI as their AI voice platform (cheapest + easiest GHL integration). Mapped out their 5 guest journey stages on paper first before touching a single setting.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot d2"></div>
+      <div class="tl-phase p2">Week 1 · Days 4–7</div>
+      <div class="tl-title">First Automation: Welcome Call</div>
+      <div class="tl-desc">Built a single workflow: Booking Confirmed → Wait 30 min → Send AI Voice Welcome Call. Wrote the script themselves — kept it under 20 seconds. Tested it 12 times on their own phones before enabling it for real guests. It worked first try in production.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot d3"></div>
+      <div class="tl-phase p3">Week 2 · Days 8–14</div>
+      <div class="tl-title">SMS Sequences & Check-In Flow</div>
+      <div class="tl-desc">Added a 3-message SMS drip: (1) Check-in details 24 hrs before. (2) Key code + Wi-Fi password 1 hr before. (3) "Welcome to Maplewood!" on arrival day. Also connected Booking.com so all reservations auto-synced into GHL — zero manual entry.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot d4"></div>
+      <div class="tl-phase p4">Week 3 · Days 15–18</div>
+      <div class="tl-title">Spa Upsell & Review Automation</div>
+      <div class="tl-desc">Created a "During Stay" upsell flow: SMS on day 2 of stay offering a spa discount. Then a checkout flow: Thank you message → 24 hr later, review request with direct link to Google Reviews. This single automation drove $12k in spa bookings and 67% more reviews in the first 60 days.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot d5"></div>
+      <div class="tl-phase p5">Week 3 · Days 19–21</div>
+      <div class="tl-title">Test, Go Live & Monitor</div>
+      <div class="tl-desc">Ran every workflow through GHL Test Mode with fake guest profiles. Everything passed. Went live on a Tuesday — low-traffic day on purpose. Monitored the dashboard hourly for the first 48 hours. Zero issues. By end of week 3, the full system was running hands-free.</div>
+    </div>
+
+  </div><!-- end timeline -->
+
+  <!-- Quote -->
+  <div class="case-quote">
+    <div class="cq-mark">"</div>
+    <p>I was terrified of the tech side. But the whole thing took less time than I expected. The AI voice call blew our guests away — we got three separate compliments in the first week saying it felt "so personal."</p>
+    <div class="cq-author"><strong>— Sarah Mitchell</strong>, Operations Manager, The Maplewood Boutique Hotel</div>
+  </div>
+
+  <!-- Key Takeaways -->
+  <div class="sec-label"><div class="line"></div><span>Key Takeaways</span></div>
+  <div class="tips-row">
+    <div class="tip-card"><div class="tip-icon">🎯</div><div><h4>Start With One Thing</h4><p>They didn't build 10 automations on day one. They built one welcome call, made sure it worked perfectly, then added more. This approach prevented overwhelm and errors.</p></div></div>
+    <div class="tip-card"><div class="tip-icon">📝</div><div><h4>Plan on Paper First</h4><p>Before touching GHL, they mapped their guest journey on a notebook. Knowing the plan made the actual setup 3x faster. Don't skip this step.</p></div></div>
+    <div class="tip-card"><div class="tip-icon">💰</div><div><h4>Upsells Pay for Everything</h4><p>The spa SMS upsell alone generated $12k in 60 days — that's 30x their total software costs. One well-timed offer to the right guest is all it takes.</p></div></div>
+  </div>
+</div><!-- end sec-casestudy -->
+
+<!-- ═══════ FAQ ═══════ -->
+<div class="section" id="sec-faq">
+  <div class="hero" style="padding-bottom:10px;">
+    <div class="hero-badge"><div class="dot"></div> New · FAQ</div>
+    <h1>Frequently Asked <span class="highlight">Questions</span></h1>
+    <p>The real questions beginners ask after reading the guides. Honest, straight answers — no runaround.</p>
+  </div>
+
+  <div class="sec-label"><div class="line"></div><span>12 Questions Answered</span></div>
+  <div class="faq-list" id="faqList">
+
+    <div class="faq-card open" onclick="toggleFaq(this)">
+      <div class="faq-head"><div class="fq-icon">❓</div><div class="fq-q">Can I use GHL without a website?</div><div class="fq-arrow">▼</div></div>
+      <div class="faq-body"><div class="faq-inner">
+        <p>Yes — 100%. GHL has a built-in website builder, but you don't even need to use it. Most hospitality automations run purely through SMS, email, and AI voice calls. No website required to get started.</p>
+        <p>If you already have a property listing on Booking.com or Airbnb, that's all you need as your "front door." GHL works behind the scenes.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-card" onclick="toggleFaq(this)">
+      <div class="faq-head"><div class="fq-icon">❓</div><div class="fq-q">Does AI voice work internationally?</div><div class="fq-arrow">▼</div></div>
+      <div class="faq-body"><div class="faq-inner">
+        <p>Yes, but it depends on the platform. VAPI and Retell AI both support international calls and multilingual voices. Bland AI is more limited to English-dominant calls.</p>
+        <p>For properties that receive guests from many countries, Retell AI is the best pick — it has the strongest multilingual support (Spanish, French, German, Mandarin, and more). Just make sure you store guest phone numbers with the correct country code.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-card" onclick="toggleFaq(this)">
+      <div class="faq-head"><div class="fq-icon">❓</div><div class="fq-q">How many automations can I run at once?</div><div class="fq-arrow">▼</div></div>
+      <div class="faq-body"><div class="faq-inner">
+        <p>On the Unlimited and Agency plans — unlimited. There's no cap on how many workflows you can create or run simultaneously. You could have 50 active automations running across different guest segments at the same time.</p>
+        <p>The Starter plan has some limits on advanced workflow features, but even it can handle multiple basic automations running in parallel.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-card" onclick="toggleFaq(this)">
+      <div class="faq-head"><div class="fq-icon">❓</div><div class="fq-q">What if a guest wants to talk to a real person?</div><div class="fq-arrow">▼</div></div>
+      <div class="faq-body"><div class="faq-inner">
+        <p>Build an "escape hatch" into your AI voice script. End every call with: "Press 0 to speak with a team member." When they press 0, the AI voice call ends and GHL can auto-dial your front desk or send you an alert SMS.</p>
+        <p>This is standard practice. Guests feel safe knowing the option exists, even if 80% never use it.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-card" onclick="toggleFaq(this)">
+      <div class="faq-head"><div class="fq-icon">❓</div><div class="fq-q">Is GHL worth it for just one property?</div><div class="fq-arrow">▼</div></div>
+      <div class="faq-body"><div class="faq-inner">
+        <p>It depends on your revenue. If your property earns $5,000+/mo, GHL pays for itself easily — even one saved staff hour per day adds up fast. The automation alone can replace a part-time front desk assistant.</p>
+        <p>If you're smaller, start on Starter ($97/mo) and upgrade as you grow. The ROI comes from fewer missed bookings, faster guest responses, and better reviews (which drive more bookings).</p>
+      </div></div>
+    </div>
+
+    <div class="faq-card" onclick="toggleFaq(this)">
+      <div class="faq-head"><div class="fq-icon">❓</div><div class="fq-q">Can I cancel GHL anytime?</div><div class="fq-arrow">▼</div></div>
+      <div class="faq-body"><div class="faq-inner">
+        <p>Yes. GHL is month-to-month — no annual contracts required. You can cancel anytime from your account settings. Your data and automations stay in the system until the end of your billing period.</p>
+        <p>Before canceling, export your contact list (GHL allows CSV export) so you don't lose your guest database.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-card" onclick="toggleFaq(this)">
+      <div class="faq-head"><div class="fq-icon">❓</div><div class="fq-q">Do I need technical skills to set this up?</div><div class="fq-arrow">▼</div></div>
+      <div class="faq-body"><div class="faq-inner">
+        <p>No coding required. GHL is built for non-technical users — it's drag-and-drop for workflows, and the AI voice connection is just copying and pasting an API key. If you can use a smartphone and follow step-by-step instructions, you can set this up.</p>
+        <p>The hardest part most beginners face is writing good AI voice scripts. But even that is just writing a few sentences — no tech knowledge needed.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-card" onclick="toggleFaq(this)">
+      <div class="faq-head"><div class="fq-icon">❓</div><div class="fq-q">What happens if the AI voice makes a mistake?</div><div class="fq-arrow">▼</div></div>
+      <div class="faq-body"><div class="faq-inner">
+        <p>AI voice tools occasionally stumble on unusual names or mispronounce words. To minimize this: (1) Keep scripts short and simple. (2) Preview every script before going live. (3) Use phonetic spelling for tricky property names (e.g., "The Mah-JEE-kah Resort").</p>
+        <p>If a guest reports an issue, you'll get flagged in GHL. You can manually follow up with a personal message to smooth it over. It's rare, and guests are generally understanding.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-card" onclick="toggleFaq(this)">
+      <div class="faq-head"><div class="fq-icon">❓</div><div class="fq-q">Can guests reply to AI voice calls?</div><div class="fq-arrow">▼</div></div>
+      <div class="faq-body"><div class="faq-inner">
+        <p>Yes — using keypad input. You can set up "Press 1 for X, Press 2 for Y" menus. The AI captures their keypress and routes them accordingly inside GHL.</p>
+        <p>Full conversational replies (guest speaking freely) are possible with Retell AI, which has the best natural language understanding. But for most hospitality uses, keypad menus are sufficient and more reliable.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-card" onclick="toggleFaq(this)">
+      <div class="faq-head"><div class="fq-icon">❓</div><div class="fq-q">How do I handle different languages?</div><div class="fq-arrow">▼</div></div>
+      <div class="faq-body"><div class="faq-inner">
+        <p>GHL itself supports multiple languages for SMS and email. For AI voice, Retell AI is the strongest multilingual option. You can create separate voice scripts in different languages and set up logic: if the guest's location is France → send the French script.</p>
+        <p>Start with English only. Add languages based on where your actual guests come from — don't over-engineer it from day one.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-card" onclick="toggleFaq(this)">
+      <div class="faq-head"><div class="fq-icon">❓</div><div class="fq-q">What's the difference between GHL and a PMS?</div><div class="fq-arrow">▼</div></div>
+      <div class="faq-body"><div class="faq-inner">
+        <p>A PMS (Property Management System) like Cloudbeds or Mews handles the actual hotel operations — room inventory, check-in/out, housekeeping. GHL handles guest communication and marketing automations.</p>
+        <p>They work best together. Your PMS manages the property; GHL manages the guest relationship. Many hosts connect their PMS to GHL so booking data flows automatically between both systems.</p>
+      </div></div>
+    </div>
+
+    <div class="faq-card" onclick="toggleFaq(this)">
+      <div class="faq-head"><div class="fq-icon">❓</div><div class="fq-q">Is there a mobile app for GHL?</div><div class="fq-arrow">▼</div></div>
+      <div class="faq-body"><div class="faq-inner">
+        <p>Yes — GHL has iOS and Android apps. You can monitor your automations, see guest activity, and respond to messages on the go. However, building and editing workflows is still easier on desktop.</p>
+        <p>Recommended workflow: Set everything up on desktop first. Then use the mobile app for daily monitoring and quick guest responses while you're on the move.</p>
+      </div></div>
+    </div>
+
+  </div><!-- end faqList -->
+</div><!-- end sec-faq -->
+
+<!-- ═══════ GLOSSARY ═══════ -->
+<div class="section" id="sec-glossary">
+  <div class="hero" style="padding-bottom:10px;">
+    <div class="hero-badge"><div class="dot"></div> New · Glossary</div>
+    <h1>Key Terms <span class="highlight">Explained</span></h1>
+    <p>Every term you'll see in GHL and hospitality automations — plain English, no jargon. Search or filter by category.</p>
+  </div>
+
+  <!-- Search -->
+  <div class="gloss-search">
+    <span class="s-icon">🔍</span>
+    <input type="text" id="glossSearch" placeholder="Search terms…" oninput="filterGloss()" autocomplete="off"/>
+  </div>
+
+  <!-- Category pills -->
+  <div class="gloss-cats">
+    <div class="gloss-cat active" onclick="filterCat('all',this)">All</div>
+    <div class="gloss-cat" onclick="filterCat('crm',this)">CRM</div>
+    <div class="gloss-cat" onclick="filterCat('automation',this)">Automation</div>
+    <div class="gloss-cat" onclick="filterCat('ai',this)">AI Voice</div>
+    <div class="gloss-cat" onclick="filterCat('marketing',this)">Marketing</div>
+    <div class="gloss-cat" onclick="filterCat('tech',this)">Technical</div>
+  </div>
+
+  <!-- Terms -->
+  <div class="gloss-list" id="glossList">
+
+    <!-- CRM -->
+    <div class="gloss-term open" data-cat="crm" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--accent2);"></div><div class="gt-name">CRM (Customer Relationship Manager)</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>A system that stores all your guest information in one place — names, contact details, booking history, and past interactions. GHL's CRM is where every guest record lives.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>When a guest books a room, a new CRM contact is automatically created with their name, email, phone number, and booking date.</div>
+      </div></div>
+    </div>
+
+    <div class="gloss-term" data-cat="crm" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--accent2);"></div><div class="gt-name">Pipeline</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>A visual board (like Kanban) that shows where each guest is in their journey — from "Inquiry" to "Booked" to "Checked In." Think of it as columns that guests move through automatically.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>A guest submits a booking → moves to "Confirmed" column → checks in → moves to "Active Stay" column. Each move can trigger a different automation.</div>
+      </div></div>
+    </div>
+
+    <div class="gloss-term" data-cat="crm" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--accent2);"></div><div class="gt-name">Contact / Lead</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>A person in your CRM. "Lead" usually means someone who hasn't booked yet (just showed interest). "Contact" is the broader term for anyone in the system — leads, guests, past visitors.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>Someone fills out your website inquiry form → becomes a "Lead." Once they book a stay, they become a "Contact" with a full guest profile.</div>
+      </div></div>
+    </div>
+
+    <div class="gloss-term" data-cat="crm" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--accent2);"></div><div class="gt-name">Tag</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>Labels you add to a contact to organize and filter them. Tags are how GHL knows who to send what message to. You can create any tags you want.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>Tags like "VIP Guest," "Checked In," "Needs Follow-Up," or "Spa Interest" help you segment guests and trigger the right automations.</div>
+      </div></div>
+    </div>
+
+    <!-- Automation -->
+    <div class="gloss-term" data-cat="automation" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--gold2);"></div><div class="gt-name">Workflow</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>A set of automatic steps that run when something happens. A workflow has a Trigger (what starts it) and Actions (what it does). Think of it as a "if this happens, then do that" chain.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>Trigger: "Guest books a room" → Action 1: Send welcome SMS → Action 2: Wait 1 hour → Action 3: Send AI voice call.</div>
+      </div></div>
+    </div>
+
+    <div class="gloss-term" data-cat="automation" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--gold2);"></div><div class="gt-name">Trigger</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>The event that starts a workflow. Nothing happens until the trigger fires. Triggers can be time-based ("2 hours before check-in") or action-based ("new booking confirmed").</p>
+        <div class="gt-example"><span class="ex-label">Example</span>Common hospitality triggers: New booking, check-in date approaching, guest checks out, guest replies to SMS.</div>
+      </div></div>
+    </div>
+
+    <div class="gloss-term" data-cat="automation" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--gold2);"></div><div class="gt-name">Drip Campaign</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>A series of messages sent automatically over time — one after another at set intervals. "Drip" because the messages "drip" out slowly, not all at once.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>Day 1: Welcome email. Day 3: "Here's what to do at our property" SMS. Day 5: Spa offer. Day 7: Review request after checkout.</div>
+      </div></div>
+    </div>
+
+    <!-- AI Voice -->
+    <div class="gloss-term" data-cat="ai" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--teal);"></div><div class="gt-name">API Key</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>A secret code that lets two apps talk to each other. When you connect an AI voice tool to GHL, you copy an API key from the voice tool and paste it into GHL. That's it — they're now connected.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>You go to VAPI → copy your API key (a long string of letters and numbers) → paste it into GHL Settings → AI Voice. Now GHL can make AI voice calls.</div>
+      </div></div>
+    </div>
+
+    <div class="gloss-term" data-cat="ai" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--teal);"></div><div class="gt-name">AI Voice Bot</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>An AI-powered phone caller that speaks to your guests automatically. It sounds like a real person, follows a script you write, and can handle basic conversations (like confirming a booking or answering common questions).</p>
+        <div class="gt-example"><span class="ex-label">Example</span>A guest calls your property at 2am. The AI voice bot answers, confirms their booking details, and offers to connect them to a human if they need more help.</div>
+      </div></div>
+    </div>
+
+    <div class="gloss-term" data-cat="ai" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--teal);"></div><div class="gt-name">Dynamic Variable</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>A placeholder in your message that automatically gets replaced with real guest data. Written as [brackets]. GHL fills in the actual info when the message sends.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>"Hello [First Name], your check-in on [Check-in Date] at [Property Name] is confirmed!" — each bracket gets replaced with the real data.</div>
+      </div></div>
+    </div>
+
+    <!-- Marketing -->
+    <div class="gloss-term" data-cat="marketing" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--pink);"></div><div class="gt-name">Open Rate</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>The percentage of people who actually opened your email or SMS. It tells you how many guests are reading your automated messages. Higher is better.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>You sent 100 welcome emails. 35 guests opened it. Your open rate = 35%. SMS open rates are usually much higher (90%+) than email.</div>
+      </div></div>
+    </div>
+
+    <div class="gloss-term" data-cat="marketing" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--pink);"></div><div class="gt-name">Conversion</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>When a guest does the action you wanted — like booking a room, adding a spa service, or leaving a review. Conversion is the whole goal of your automations.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>You sent a spa offer SMS to 50 guests. 8 booked a spa treatment. Your conversion rate = 16%. That's a successful automation.</div>
+      </div></div>
+    </div>
+
+    <!-- Technical -->
+    <div class="gloss-term" data-cat="tech" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--orange);"></div><div class="gt-name">Webhook</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>A way for one app to automatically notify another when something happens — like a secret notification system between tools. You don't need to understand the technical details; just know it's how apps "talk" instantly.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>When Booking.com gets a new reservation, it sends a webhook to GHL. GHL receives it instantly and creates a new guest contact — all automatic.</div>
+      </div></div>
+    </div>
+
+    <div class="gloss-term" data-cat="tech" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--orange);"></div><div class="gt-name">SPF / DKIM</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>Email security records that prove "this email really came from your business." Without them, your emails get sent to spam. GHL gives you the exact records — you just copy-paste them into your domain settings.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>You set up SPF and DKIM for yourhotel.com. Now when GHL sends emails from yourhotel.com, Gmail and Outlook trust them and deliver to the inbox instead of spam.</div>
+      </div></div>
+    </div>
+
+    <div class="gloss-term" data-cat="tech" onclick="toggleGloss(this)">
+      <div class="gt-head"><div class="gt-cat-dot" style="background:var(--orange);"></div><div class="gt-name">Integration</div><div class="gt-arrow">▼</div></div>
+      <div class="gt-body"><div class="gt-inner">
+        <p>When two apps are connected and can share data or trigger actions in each other. GHL has built-in integrations for many tools, and you can build custom ones using Zapier or webhooks.</p>
+        <div class="gt-example"><span class="ex-label">Example</span>GHL is "integrated" with Booking.com. That means bookings made on Booking.com automatically appear inside GHL — no manual work needed.</div>
+      </div></div>
+    </div>
+
+  </div><!-- end gloss-list -->
+</div><!-- end sec-glossary -->
+
+<!-- ═══════ TASKS ═══════ -->
+<div class="section" id="sec-tasks">
+  <div class="hero" style="padding-bottom:10px;">
+    <div class="hero-badge"><div class="dot"></div> Track Progress</div>
+    <h1>Your Setup <span class="highlight">Checklist</span></h1>
+    <p>Tap each item as you complete it. Track your full setup journey.</p>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progress</span><span id="prog-txt">0 / 10</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+  <div class="sec-label"><div class="line"></div><span>10 Tasks</span></div>
+  <div class="checklist" id="checklist">
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-txt">Create GHL Account<span class="sub">Sign up + select Hospitality industry</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-txt">Set Up Google Workspace<span class="sub">Connect dedicated email to GHL</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-txt">Choose AI Voice Platform<span class="sub">Bland AI, VAPI, or Retell AI</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-txt">Connect AI Voice Integration<span class="sub">Paste API key in GHL settings</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-txt">Create Welcome Voice Script<span class="sub">Write + preview your first AI script</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-txt">Build Booking Confirmation Workflow<span class="sub">Trigger + AI call + SMS action</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-txt">Set Up Guest Pipeline<span class="sub">Create 3+ journey stages in CRM</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-txt">Design Check-Out Follow-Up<span class="sub">Review request + thank you SMS</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-txt">Run Test Mode on All Workflows<span class="sub">Use fake profile, verify all steps</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-txt">Go Live & Monitor Week 1<span class="sub">Check analytics daily, optimize</span></div></div>
+  </div>
+  <div class="cta-block">
+    <h3>🎉 All Done?</h3>
+    <p>You're now running a fully automated hospitality stack. Level up by adding more workflows!</p>
+  </div>
+</div>
+
+<!-- ══════════════ JS ══════════════ -->
+<script>
+// ── PILL NAV ──
+document.querySelectorAll('.pill').forEach(pill => {
+  pill.addEventListener('click', () => goTab(pill.dataset.tab));
+});
+
+function goTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  document.querySelector('[data-tab="' + id + '"]').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── GENERIC ACCORDION (one-open) ──
+function toggleAcc(card, listId) {
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('#' + listId + ' .acc-card').forEach(c => c.classList.remove('open'));
+  if (!wasOpen) card.classList.add('open');
+}
+
+// ── TROUBLE ACCORDION ──
+function toggleTrouble(card) {
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.trouble-card').forEach(c => c.classList.remove('open'));
+  if (!wasOpen) card.classList.add('open');
+}
+
+// ── INTEGRATION CARDS (independent toggle) ──
+function toggleInteg(card) {
+  card.classList.toggle('open');
+}
+
+// ── CHECKLIST ──
+function toggleCheck(item) {
+  item.classList.toggle('done');
+  item.querySelector('.check-box').classList.toggle('done');
+  updateProgress();
+}
+function updateProgress() {
+  const total = document.querySelectorAll('.check-item').length;
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('prog-fill').style.width = Math.round((done/total)*100) + '%';
+  document.getElementById('prog-txt').textContent = done + ' / ' + total;
+}
+
+// ── GLOSSARY TOGGLE ──
+function toggleGloss(term) {
+  const wasOpen = term.classList.contains('open');
+  document.querySelectorAll('.gloss-term').forEach(t => t.classList.remove('open'));
+  if (!wasOpen) term.classList.add('open');
+}
+
+// ── GLOSSARY SEARCH ──
+function filterGloss() {
+  const q = document.getElementById('glossSearch').value.toLowerCase();
+  document.querySelectorAll('.gloss-term').forEach(term => {
+    const name = term.querySelector('.gt-name').textContent.toLowerCase();
+    const body = term.querySelector('.gt-inner').textContent.toLowerCase();
+    const match = name.includes(q) || body.includes(q);
+    term.style.display = match ? 'block' : 'none';
+  });
+}
+
+// ── GLOSSARY CATEGORY FILTER ──
+function filterCat(cat, btn) {
+  document.querySelectorAll('.gloss-cat').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('glossSearch').value = '';
+  document.querySelectorAll('.gloss-term').forEach(term => {
+    if (cat === 'all' || term.dataset.cat === cat) {
+      term.style.display = 'block';
+    } else {
+      term.style.display = 'none';
+    }
+  });
+}
+
+// ── FAQ TOGGLE ──
+function toggleFaq(card) {
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.faq-card').forEach(c => c.classList.remove('open'));
+  if (!wasOpen) card.classList.add('open');
+}
+</script>
+</body>
+</html>
